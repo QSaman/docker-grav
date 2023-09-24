@@ -48,18 +48,19 @@ RUN pecl install apcu \
     && docker-php-ext-enable apcu yaml
 
 # Set user to www-data
-RUN chown www-data:www-data /var/www
+RUN chown -R www-data:www-data /var/www
 USER www-data
 
-# Define Grav specific version of Grav or use latest stable
-ARG GRAV_VERSION=latest
-
-# Install grav
-WORKDIR /var/www
-RUN curl -o grav-admin.zip -SL https://getgrav.org/download/core/grav-admin/${GRAV_VERSION} && \
-    unzip grav-admin.zip && \
-    mv -T /var/www/grav-admin /var/www/html && \
-    rm grav-admin.zip
+WORKDIR /var/www/html
+RUN    bin/grav install && \
+       bin/gpm install -y mathjax && \
+       bin/gpm install -y  langswitcher && \
+       bin/gpm install -y language-selector && \
+       bin/gpm install -y themer && \
+       bin/gpm install -y anchors && \
+       bin/gpm install -y highlight && \
+       bin/gpm install -y devtools && \
+       bin/gpm install -y markdown-notices
 
 # Create cron job for Grav maintenance scripts
 RUN (crontab -l; echo "* * * * * cd /var/www/html;/usr/local/bin/php bin/grav scheduler 1>> /dev/null 2>&1") | crontab -

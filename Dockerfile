@@ -52,15 +52,6 @@ RUN chown -R www-data:www-data /var/www
 USER www-data
 
 WORKDIR /var/www/html
-RUN    bin/grav install && \
-       bin/gpm install -y mathjax && \
-       bin/gpm install -y  langswitcher && \
-       bin/gpm install -y language-selector && \
-       bin/gpm install -y themer && \
-       bin/gpm install -y anchors && \
-       bin/gpm install -y highlight && \
-       bin/gpm install -y devtools && \
-       bin/gpm install -y markdown-notices
 
 # Create cron job for Grav maintenance scripts
 RUN (crontab -l; echo "* * * * * cd /var/www/html;/usr/local/bin/php bin/grav scheduler 1>> /dev/null 2>&1") | crontab -

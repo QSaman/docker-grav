@@ -1,3 +1,7 @@
+# How to start
+
+You should run `get_grav.sh` first.
+
 # Official Docker Image for Grav
 
 This currently is pretty minimal and uses:
